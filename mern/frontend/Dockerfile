@@ -15,7 +15,7 @@ COPY package.json .
 RUN npm config set registry https://registry.npmmirror.com
 RUN npm config set fetch-retry-maxtimeout 60000
 
-RUN npm install
+RUN npm install --no-cache
 
 # Inform Docker that the container is listening on the specified port at runtime
 EXPOSE 5173
