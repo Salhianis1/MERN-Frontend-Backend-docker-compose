@@ -67,7 +67,7 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/Salhianis1/MERN-Frontend-Backend-docker-compose.git'
         GIT_BRANCH = 'main'
-        SONARQUBE_ENV = 'MySonarQube' // This is the name of the SonarQube server configured in Jenkins
+        SONARQUBE_ENV = 'SonarQube' // This is the name of the SonarQube server configured in Jenkins
     }
 
     stages {
