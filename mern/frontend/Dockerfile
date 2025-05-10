@@ -10,12 +10,7 @@ WORKDIR /app
 # Copy the file from your host to your current location
 COPY package.json .
 
-# Run the command inside your image filesystem
-# Optional: change registry or extend timeout
-RUN npm config set registry https://registry.npmmirror.com
-RUN npm config set fetch-retry-maxtimeout 60000
-
-RUN npm install --no-cache
+RUN npm install
 
 # Inform Docker that the container is listening on the specified port at runtime
 EXPOSE 5173
