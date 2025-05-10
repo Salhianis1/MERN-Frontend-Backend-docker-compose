@@ -1,32 +1,12 @@
+
 // pipeline {
 //     agent any
 
 //     environment {
 //         GIT_REPO_URL = 'https://github.com/Salhianis1/MERN-Frontend-Backend-docker-compose.git'
-//         GIT_BRANCH = 'main' // or 'master' or any other branch
-//     }
-
-//     stages {
-//         stage('Clone Repository') {
-//             steps {
-//                 echo "Cloning from ${env.GIT_REPO_URL}"
-//                 git branch: "${env.GIT_BRANCH}", url: "${env.GIT_REPO_URL}"
-//             }
-//         }
-
-//         stage('List Files') {
-//             steps {
-//                 sh 'ls -la'
-//             }
-//         }
-
-//         pipeline {
-//     agent any
-
-//     environment {
-//         GIT_REPO_URL = 'https://github.com/your-username/your-repository.git'
 //         GIT_BRANCH = 'main'
-//         SONARQUBE_ENV = 'MySonarQube' // This is the name of the SonarQube server configured in Jenkins
+//         SONARQUBE_ENV = 'SonarQube' // Name of SonarQube config in Jenkins
+//         SONAR_PROJECT_KEY = 'MERN-App'
 //     }
 
 //     stages {
@@ -40,22 +20,20 @@
 //         stage('SonarQube Scan') {
 //             steps {
 //                 script {
-//                     withSonarQubeEnv("${env.SONARQUBE_ENV}") {
-//                         sh 'sonar-scanner'
+//                     withCredentials([string(credentialsId: 'SonarQube-ID', variable: 'jenkins')]) {
+//                         withSonarQubeEnv("${env.SONARQUBE_ENV}") {
+//                             sh """
+//                                 sonar-scanner \
+//                                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+//                                 -Dsonar.sources=. \
+//                                 -Dsonar.token=${jenkins}
+//                             """
+//                         }
 //                     }
 //                 }
 //             }
 //         }
 
-//         stage('Quality Gate') {
-//             steps {
-//                 timeout(time: 1, unit: 'MINUTES') {
-//                     waitForQualityGate abortPipeline: true
-//                 }
-//             }
-//         }
-//     }
-// }
 
 //     }
 // }
@@ -67,8 +45,9 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/Salhianis1/MERN-Frontend-Backend-docker-compose.git'
         GIT_BRANCH = 'main'
-        SONARQUBE_ENV = 'SonarQube' // Name of SonarQube config in Jenkins
+        SONARQUBE_ENV = 'SonarQube'
         SONAR_PROJECT_KEY = 'MERN-App'
+        DOCKERHUB_USERNAME = 'salhianis20'  // Replace with your actual Docker Hub username
     }
 
     stages {
@@ -96,8 +75,48 @@ pipeline {
             }
         }
 
+        stage('Build Frontend Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${DOCKERHUB_USERNAME}/frontend ./mern/frontend"
+                }
+            }
+        }
 
+        stage('Build Backend Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t ${DOCKERHUB_USERNAME}/backend ./mern/backend"
+                }
+            }
+        }
+
+        stage('Push Docker Images to Docker Hub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh """
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push ${DOCKERHUB_USERNAME}/frontend
+                            docker push ${DOCKERHUB_USERNAME}/backend
+                            docker logout
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
     }
 }
+
+
 
 
