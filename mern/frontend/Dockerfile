@@ -1,22 +1,35 @@
-# Use the official image as a parent image
-# Description: Dockerfile for the client side of the MERN stack application
-
-# Use the official image as a parent image
-FROM node:latest
+# ----------- Stage 1: Build the application -----------
+FROM node:18 AS builder
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the file from your host to your current location
+# Copy only the package.json to install dependencies
 COPY package.json .
 
+# Install dependencies
 RUN npm install
 
-# Inform Docker that the container is listening on the specified port at runtime
-EXPOSE 5173
-
-# Copy the rest of your app's source code from your host to your image filesystem
+# Copy the rest of the application code
 COPY . .
 
-# Run the specified command within the container
-CMD ["npm", "run", "dev"]
+# Build the application (assuming it's a Vite/React app or similar)
+RUN npm run build
+
+# ----------- Stage 2: Serve the built app -----------
+FROM node:18-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy only the production build from the builder stage
+COPY --from=builder /app/dist ./dist
+
+# Optionally install a lightweight server (e.g., serve)
+RUN npm install -g serve
+
+# Expose the port your app will run on
+EXPOSE 5173
+
+# Command to serve the built app
+CMD ["serve", "-s", "dist", "-l", "5173"]
