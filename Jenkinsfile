@@ -67,7 +67,8 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/Salhianis1/MERN-Frontend-Backend-docker-compose.git'
         GIT_BRANCH = 'main'
-        SONARQUBE_ENV = 'SonarQube' // This is the name of the SonarQube server configured in Jenkins
+        SONARQUBE_ENV = 'SonarQube' // Name of SonarQube config in Jenkins
+        SONAR_PROJECT_KEY = 'MERN-App'
     }
 
     stages {
@@ -81,8 +82,15 @@ pipeline {
         stage('SonarQube Scan') {
             steps {
                 script {
-                    withSonarQubeEnv("${env.SONARQUBE_ENV}") {
-                        sh 'sonar-scanner'
+                    withCredentials([string(credentialsId: 'SonarQube-ID', variable: 'TOKEN')]) {
+                        withSonarQubeEnv("${env.SONARQUBE_ENV}") {
+                            sh """
+                                sonar-scanner \
+                                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                                -Dsonar.sources=. \
+                                -Dsonar.token=${TOKEN}
+                            """
+                        }
                     }
                 }
             }
@@ -97,4 +105,5 @@ pipeline {
         }
     }
 }
+
 
