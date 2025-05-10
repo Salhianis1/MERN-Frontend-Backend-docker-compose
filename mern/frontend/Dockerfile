@@ -2,7 +2,7 @@
 # Description: Dockerfile for the client side of the MERN stack application
 
 # Use the official image as a parent image
-FROM node
+FROM node:latest
 
 # Set the working directory
 WORKDIR /app
