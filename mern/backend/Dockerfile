@@ -8,7 +8,7 @@ COPY package.json .
 RUN npm config set registry https://registry.npmmirror.com
 RUN npm config set fetch-retry-maxtimeout 60000
 
-RUN npm install
+RUN npm install --no-cache
 
 COPY . .
 
