@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build the application -----------
-FROM node AS builder
+FROM node18.9.1 AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # ----------- Stage 2: Serve the built app -----------
-FROM node
+FROM node18.9.1
 
 # Set the working directory
 WORKDIR /app
