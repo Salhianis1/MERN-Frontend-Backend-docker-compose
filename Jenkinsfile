@@ -120,6 +120,19 @@ pipeline {
                 }
             }
         }
+
+
+        stage('Scan Docker Images with Trivy') {
+            steps {
+                script {
+                    sh """
+                        trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKERHUB_USERNAME}/frontend || echo "Frontend scan found issues"
+                        trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKERHUB_USERNAME}/backend || echo "Backend scan found issues"
+                    """
+                }
+            }
+        }
+
     }
 
     post {
