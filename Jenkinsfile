@@ -126,14 +126,13 @@ pipeline {
             steps {
                 script {
                     sh """
-                        trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKERHUB_USERNAME}/frontend || echo "Frontend scan found issues"
-                        trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKERHUB_USERNAME}/backend || echo "Backend scan found issues"
+                        mkdir -p trivy-reports
+                        trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/frontend_scan.txt ${DOCKERHUB_USERNAME}/frontend
+                        trivy image --severity HIGH,CRITICAL --format table -o trivy-reports/backend_scan.txt ${DOCKERHUB_USERNAME}/backend
                     """
                 }
             }
         }
-
-    }
 
     post {
         always {
