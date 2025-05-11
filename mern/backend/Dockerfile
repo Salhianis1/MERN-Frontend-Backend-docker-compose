@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build the application -----------
-FROM node:slim AS builder
+FROM node AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY . .
 # RUN npm run build
 
 # ----------- Stage 2: Run the application -----------
-FROM node:slim
+FROM node
 
 WORKDIR /app
 
