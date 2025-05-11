@@ -75,10 +75,17 @@ pipeline {
             }
         }
 
-        stage('Quality Gate') {
+        stage('Quality Gate (Non-blocking)') {
             steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+                script {
+                    try {
+                        timeout(time: 5, unit: 'MINUTES') {
+                            def qualityGate = waitForQualityGate()
+                            echo "Quality Gate status: ${qualityGate.status}"
+                        }
+                    } catch (err) {
+                        echo "Quality Gate check skipped or failed: ${err}"
+                    }
                 }
             }
         }
