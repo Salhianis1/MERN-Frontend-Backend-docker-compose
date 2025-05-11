@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build the application -----------
-FROM node AS builder
+FROM node:slim AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # ----------- Stage 2: Serve the built app -----------
-FROM node
+FROM node:slim
 
 # Set the working directory
 WORKDIR /app
