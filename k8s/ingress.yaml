@@ -4,7 +4,7 @@ metadata:
   name: mern-app-ingress
 spec:
   rules:
-    - host: mern.local
+    - host: mern-app.com
       http:
         paths:
           - path: /
