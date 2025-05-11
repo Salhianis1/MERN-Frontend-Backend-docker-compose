@@ -38,7 +38,6 @@
 //     }
 // }
 
-
 pipeline {
     agent any
 
@@ -121,7 +120,6 @@ pipeline {
             }
         }
 
-
         stage('Scan Docker Images with Trivy') {
             steps {
                 script {
@@ -133,14 +131,6 @@ pipeline {
                 }
             }
         }
+    } // closes stages
+} // closes pipeline
 
-    post {
-        always {
-            echo 'Pipeline completed.'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
-    }
-}
-}
