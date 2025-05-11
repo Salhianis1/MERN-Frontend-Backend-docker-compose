@@ -15,7 +15,7 @@ COPY . .
 # RUN npm run build
 
 # ----------- Stage 2: Run the application -----------
-FROM node18.9.1
+FROM node:18.9.1
 
 WORKDIR /app
 
