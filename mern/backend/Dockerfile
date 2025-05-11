@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build the application -----------
-FROM node AS builder
+FROM node:18.9.1 AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ COPY . .
 # RUN npm run build
 
 # ----------- Stage 2: Run the application -----------
-FROM node
+FROM node18.9.1
 
 WORKDIR /app
 
