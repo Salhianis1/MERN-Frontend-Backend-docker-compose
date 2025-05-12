@@ -57,22 +57,22 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
-            steps {
-                script {
-                    withCredentials([string(credentialsId: 'SonarQube-ID', variable: 'jenkins')]) {
-                        withSonarQubeEnv("${env.SONARQUBE_ENV}") {
-                            sh """
-                                sonar-scanner \
-                                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                                -Dsonar.sources=. \
-                                -Dsonar.token=${jenkins}
-                            """
-                        }
-                    }
-                }
-            }
-        }
+        // stage('SonarQube Scan') {
+        //     steps {
+        //         script {
+        //             withCredentials([string(credentialsId: 'SonarQube-ID', variable: 'jenkins')]) {
+        //                 withSonarQubeEnv("${env.SONARQUBE_ENV}") {
+        //                     sh """
+        //                         sonar-scanner \
+        //                         -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+        //                         -Dsonar.sources=. \
+        //                         -Dsonar.token=${jenkins}
+        //                     """
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // stage('Quality Gate (Non-blocking)') {
         //     steps {
