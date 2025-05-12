@@ -1,43 +1,4 @@
 
-// pipeline {
-//     agent any
-
-//     environment {
-//         GIT_REPO_URL = 'https://github.com/Salhianis1/MERN-Frontend-Backend-docker-compose.git'
-//         GIT_BRANCH = 'main'
-//         SONARQUBE_ENV = 'SonarQube' // Name of SonarQube config in Jenkins
-//         SONAR_PROJECT_KEY = 'MERN-App'
-//     }
-
-//     stages {
-//         stage('Clone Repository') {
-//             steps {
-//                 echo "Cloning from ${env.GIT_REPO_URL}"
-//                 git branch: "${env.GIT_BRANCH}", url: "${env.GIT_REPO_URL}"
-//             }
-//         }
-
-//         stage('SonarQube Scan') {
-//             steps {
-//                 script {
-//                     withCredentials([string(credentialsId: 'SonarQube-ID', variable: 'jenkins')]) {
-//                         withSonarQubeEnv("${env.SONARQUBE_ENV}") {
-//                             sh """
-//                                 sonar-scanner \
-//                                 -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-//                                 -Dsonar.sources=. \
-//                                 -Dsonar.token=${jenkins}
-//                             """
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-
-
-//     }
-// }
-
 pipeline {
     agent any
 
