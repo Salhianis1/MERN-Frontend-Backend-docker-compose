@@ -1,35 +1,21 @@
 # ----------- Stage 1: Build the application -----------
 FROM node:18.9.1 AS builder
 
-# Set the working directory
 WORKDIR /app
 
-# Copy only the package.json to install dependencies
-COPY package.json .
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
 COPY . .
-
-# Build the application (assuming it's a Vite/React app or similar)
 RUN npm run build
 
 # ----------- Stage 2: Serve the built app -----------
-FROM node:18.9.1
+FROM node:18.9.1-slim
 
-# Set the working directory
 WORKDIR /app
 
-# Copy only the production build from the builder stage
 COPY --from=builder /app/dist ./dist
 
-# Optionally install a lightweight server (e.g., serve)
-RUN npm install -g serve
-
-# Expose the port your app will run on
+# Use npx to avoid global installs
 EXPOSE 5173
-
-# Command to serve the built app
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["npx", "serve", "-s", "dist", "-l", "5173"]
