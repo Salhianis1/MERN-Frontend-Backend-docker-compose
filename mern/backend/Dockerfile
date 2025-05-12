@@ -4,7 +4,6 @@ FROM node:18.9.1 AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
 
 COPY . .
 
