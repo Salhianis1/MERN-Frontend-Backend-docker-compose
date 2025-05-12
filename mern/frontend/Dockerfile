@@ -4,7 +4,7 @@ FROM node:18.9.1 AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci  # <-- include dev dependencies here
 
 COPY . .
 RUN npm run build
@@ -16,6 +16,5 @@ WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
 
-# Use npx to avoid global installs
 EXPOSE 5173
 CMD ["npx", "serve", "-s", "dist", "-l", "5173"]
