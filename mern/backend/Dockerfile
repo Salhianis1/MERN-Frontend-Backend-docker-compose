@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build the application -----------
-FROM node:18.9.1 AS builder
+FROM node:21 AS backend-builder
 
 WORKDIR /app
 
@@ -11,11 +11,10 @@ COPY . .
 # RUN npm run build
 
 # ----------- Stage 2: Run the application -----------
-FROM node:18.9.1-slim
-
+FROM node:21-slim
 WORKDIR /app
 
-COPY --from=builder /app /app
+COPY --from=backend-builder /app /app
 
 EXPOSE 5050
 
