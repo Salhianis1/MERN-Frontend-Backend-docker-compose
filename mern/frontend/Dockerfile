@@ -1,5 +1,5 @@
 # ----------- Stage 1: Build the application -----------
-FROM node:18.9.1 AS builder
+FROM node:21 AS frontend-builder
 
 WORKDIR /app
 
@@ -14,12 +14,12 @@ COPY . .
 RUN npm run build
 
 # ----------- Stage 2: Serve the built app -----------
-FROM node:18.9.1-slim
+FROM node:21-slim
 
 WORKDIR /app
 
 # Copy the build output from the builder stage
-COPY --from=builder /app/dist ./dist
+COPY --from=frontend-builder /app/dist ./dist
 
 # Expose the port the app runs on
 EXPOSE 5173
