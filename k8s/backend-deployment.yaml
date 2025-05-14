@@ -2,8 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
+  labels:
+    app: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -14,9 +16,15 @@ spec:
     spec:
       containers:
       - name: backend
-        image: salhianis20/backend:latest
+        image: salhianis20/backend  # Update with your backend image
         ports:
         - containerPort: 5050
         env:
         - name: MONGO_URI
-          value: mongodb://mongodb:27017/mydatabase
+          value: "mongodb://mongo:27017/mydatabase"  # MongoDB connection URI
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5050
+          initialDelaySeconds: 5
+          periodSeconds: 10
