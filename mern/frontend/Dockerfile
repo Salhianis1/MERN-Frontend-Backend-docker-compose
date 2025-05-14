@@ -1,28 +1,31 @@
-# ----------- Stage 1: Build the application -----------
-FROM node:21 AS frontend-builder
+FROM node:18.9.1-slim AS builder
+
+
+RUN apt-get update && apt-get install -y \
+     python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app
 
-# Copy package files and install dependencies (including devDependencies)
+
 COPY package*.json ./
-RUN npm install  
 
-# Copy the rest of the application code
+RUN npm ci --force
+
+
 COPY . .
-
-# Build the application using Vite
 RUN npm run build
 
-# ----------- Stage 2: Serve the built app -----------
-FROM node:21-slim
 
-WORKDIR /app
+FROM nginx:alpine
 
-# Copy the build output from the builder stage
-COPY --from=frontend-builder /app/dist ./dist
 
-# Expose the port the app runs on
-EXPOSE 5173
+RUN rm -rf /usr/share/nginx/html/*
 
-# Use serve to serve the built app
-CMD ["npx", "serve", "-s", "dist", "-l", "5173"]
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
