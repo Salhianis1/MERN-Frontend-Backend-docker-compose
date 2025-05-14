@@ -1,4 +1,4 @@
-
+n
 pipeline {
     agent any
 
@@ -53,7 +53,7 @@ pipeline {
         stage('Build Frontend Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${DOCKERHUB_USERNAME}/frontend ./mern/frontend"
+                    sh "docker build -t ${DOCKERHUB_USERNAME}/mern-frontend ./mern/frontend"
                 }
             }
         }
@@ -61,7 +61,7 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${DOCKERHUB_USERNAME}/backend ./mern/backend"
+                    sh "docker build -t ${DOCKERHUB_USERNAME}/mern-backend ./mern/backend"
                 }
             }
         }
