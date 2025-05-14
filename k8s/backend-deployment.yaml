@@ -22,9 +22,3 @@ spec:
         env:
         - name: MONGO_URI
           value: "mongodb://mongo:27017/mydatabase"  # MongoDB connection URI
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 5050
-          initialDelaySeconds: 5
-          periodSeconds: 10
