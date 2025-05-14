@@ -7,5 +7,6 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /data/mongo  # local path for development only
+    path: /mnt/data/mongo  # Local path for storage
